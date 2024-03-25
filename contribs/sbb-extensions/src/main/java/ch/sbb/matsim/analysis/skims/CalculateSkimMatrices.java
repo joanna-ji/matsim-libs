@@ -24,10 +24,8 @@ import ch.sbb.matsim.routing.pt.raptor.RaptorParameters;
 import ch.sbb.matsim.routing.pt.raptor.RaptorStaticConfig;
 import ch.sbb.matsim.routing.pt.raptor.RaptorUtils;
 import ch.sbb.matsim.routing.pt.raptor.SwissRailRaptorData;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -111,7 +109,7 @@ public class CalculateSkimMatrices {
     private final int numberOfThreads;
     private Map<String, Coord[]> coordsPerZone = null;
 
-    public CalculateSkimMatrices(String outputDirectory, int numberOfThreads) {
+    public CalculateSkimMatrices(String outputDirectory, String zonesIdAttributeName, String directory, int numberOfThreads) {
         this.outputDirectory = outputDirectory;
         File outputDir = new File(outputDirectory);
         if (!outputDir.exists()) {
@@ -166,7 +164,7 @@ public class CalculateSkimMatrices {
         Config config = ConfigUtils.createConfig();
         Random r = new Random(4711);
 
-        CalculateSkimMatrices skims = new CalculateSkimMatrices(outputDirectory, numberOfThreads);
+        CalculateSkimMatrices skims = new CalculateSkimMatrices(outputDirectory, zonesIdAttributeName, outputDirectory, numberOfThreads);
 
         skims.calculateSamplingPointsPerZoneFromFacilities(facilitiesFilename, numberOfPointsPerZone, zonesShapeFilename, zonesIdAttributeName, r, f -> 1);
         skims.writeSamplingPointsToFile(new File(outputDirectory, ZONE_LOCATIONS_FILENAME));
@@ -306,7 +304,7 @@ public class CalculateSkimMatrices {
 
     public final void loadSamplingPointsFromFile(String filename) throws IOException {
         log.info("loading sampling points from " + filename);
-        String expectedHeader = "ZONE;POINT_INDEX;X;Y";
+		String expectedHeader = "ZONE,POINT_INDEX,X,Y";
         this.coordsPerZone = new HashMap<>();
         try (BufferedReader reader = IOUtils.getBufferedReader(filename)) {
             String header = reader.readLine();
@@ -316,7 +314,7 @@ public class CalculateSkimMatrices {
             String line;
             int maxIdx = 0;
             while ((line = reader.readLine()) != null) {
-                String[] parts = StringUtils.explode(line, ';');
+                String[] parts = StringUtils.explode(line, ',');
                 String zoneId = parts[0];
                 int idx = Integer.parseInt(parts[1]);
                 double x = Double.parseDouble(parts[2]);
@@ -330,7 +328,7 @@ public class CalculateSkimMatrices {
                     this.coordsPerZone.put(zoneId, coords);
                 }
                 coords[idx] = new Coord(x, y);
-                if (idx > maxIdx) {
+				if (idx > maxIdx) {
                     maxIdx = idx;
                 }
             }

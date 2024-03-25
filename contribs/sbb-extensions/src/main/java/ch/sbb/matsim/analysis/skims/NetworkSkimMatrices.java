@@ -65,7 +65,16 @@ public final class NetworkSkimMatrices {
             Coord[] coords = e.getValue();
             Node[] nodes = new Node[coords.length];
             nodesPerZone.put(zoneId, nodes);
-            for (int i = 0; i < coords.length; i++) {
+            // for (int i = 0; i < coords.length; i++) {
+			if(coords.length > 2){
+
+				System.out.println("stop here");
+			}
+			for (int i = 0; i < coords.length; i++) {
+				System.out.println(coords.length);
+				if(coords[i] == null){
+					break;
+				}
                 Coord coord = coords[i];
                 Node node = NetworkUtils.getNearestLink(xy2lNetwork, coord).getToNode();
                 nodes[i] = routingNetwork.getNodes().get(node.getId());
@@ -144,13 +153,20 @@ public final class NetworkSkimMatrices {
                 Node[] fromNodes = this.nodesPerZone.get(fromZoneId);
                 if (fromNodes != null) {
                     for (Node fromNode : fromNodes) {
+						if(fromNode==null){
+							break;
+						}
                         lcpTree.calculate(fromNode.getId().index(), this.departureTime, PERSON, VEHICLE);
 
                         for (T toZoneId : this.destinationZones) {
                             Node[] toNodes = this.nodesPerZone.get(toZoneId);
                             if (toNodes != null) {
                                 for (Node toNode : toNodes) {
+									if(toNode==null){
+										break;
+									}
                                     int nodeIndex = toNode.getId().index();
+
                                     OptionalTime currOptionalTime = lcpTree.getTime(nodeIndex);
                                     double currTime = currOptionalTime.orElseThrow(() -> new RuntimeException("Undefined Time"));
                                     double tt = currTime - this.departureTime;
