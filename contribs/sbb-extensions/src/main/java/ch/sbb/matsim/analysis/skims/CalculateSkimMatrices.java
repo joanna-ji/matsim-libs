@@ -312,10 +312,15 @@ public class CalculateSkimMatrices {
                 throw new RuntimeException("Bad header, expected '" + expectedHeader + "', got: '" + header + "'.");
             }
             String line;
-            int maxIdx = 0;
+			int maxIdx;
             while ((line = reader.readLine()) != null) {
                 String[] parts = StringUtils.explode(line, ',');
                 String zoneId = parts[0];
+				if (this.coordsPerZone.get(zoneId) == null){
+					maxIdx = 0;
+				}else{
+					maxIdx = this.coordsPerZone.get(zoneId).length;
+				}
                 int idx = Integer.parseInt(parts[1]);
                 double x = Double.parseDouble(parts[2]);
                 double y = Double.parseDouble(parts[3]);
@@ -508,7 +513,7 @@ public class CalculateSkimMatrices {
 
         log.info("calc PT matrices for " + Time.writeTime(startTime) + " - " + Time.writeTime(endTime));
         PTSkimMatrices.PtIndicators<String> matrices = PTSkimMatrices.calculateSkimMatrices(
-			raptorData, this.coordsPerZone, startTime, endTime, 120, raptorParameters, this.numberOfThreads, trainDetector, coordAggregator);
+			raptorData, this.coordsPerZone, startTime, endTime, 600, raptorParameters, this.numberOfThreads, trainDetector, coordAggregator);
         return matrices;
 
     }

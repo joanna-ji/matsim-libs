@@ -164,6 +164,7 @@ public class PTSkimMatrices {
 
         private static Collection<TransitStopFacility> findStopCandidates(Coord coord, SwissRailRaptor raptor, RaptorParameters parameters) {
             Collection<TransitStopFacility> stops = raptor.getUnderlyingData().findNearbyStops(coord.getX(), coord.getY(), parameters.getSearchRadius());
+
             if (stops.isEmpty()) {
                 TransitStopFacility nearest = raptor.getUnderlyingData().findNearestStop(coord.getX(), coord.getY());
                 double nearestStopDistance = CoordUtils.calcEuclideanDistance(coord, nearest.getCoord());

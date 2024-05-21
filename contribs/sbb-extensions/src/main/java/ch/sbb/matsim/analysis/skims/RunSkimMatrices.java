@@ -19,19 +19,21 @@ public class RunSkimMatrices {
 		public static void main(String[] args) throws IOException {
 			// Define configuration and input data paths
 
-			String networkFilename = "C:/Users/Ying/pt2matsim/example/muc/studyNetworkDense_inclPT.xml";
-			String transitScheduleFilename = "C:/Users/Ying/pt2matsim/example/muc/mapped_schedule_deutschland_20240225.xml";
-			String samplePointsFilename = "C:/Users/Ying/pt2matsim/example/muc/sample_points_reset.csv";
-			String zonesShapeFilename = "C:/Users/Ying/pt2matsim/example/muc/zonesNew.shp";
+			String networkFilename = "\\\\nas.ads.mwn.de\\tubv\\mob\\indiv\\joanna\\munich_skim\\muc/studyNetworkDense_inclPT.xml";
+
+			// \\nas.ads.mwn.de\tubv\mob\indiv\joanna\munich_skim\muc/mapped_schedule_deutschland_20240225.xml
+			String transitScheduleFilename = "\\\\nas.ads.mwn.de\\tubv\\mob\\indiv\\joanna\\munich_skim\\muc/mapped_schedule_deutschland_20240225.xml";
+			String samplePointsFilename = "C:/models/skim_generation/muc/sample_points_reset.csv";
+			String zonesShapeFilename = "\\\\nas.ads.mwn.de\\tubv\\mob\\projects\\2021\\tengos\\data\\mitoMunich_shapefiles\\zone/zonesNew.shp";
 			String eventsFilename= null;
 			String zonesIdAttributeName = "id";
 
-			String outputDirectory = "C:/Users/Ying/pt2matsim/example/muc/output_folder";
+			String outputDirectory = "C:/models/skim_generation/muc/output_folder_test";
 			int numberOfThreads = 8;
 			int numberOfPointsPerZone = 1;
 
-			String[] timesCarStr ={ "11:00", "15:00"};
-			String[] timesPtStr = {"11:00", "15:00"};
+			String[] timesCarStr ={};
+			String[] timesPtStr = {"11:00", "11:10"};
 
 			double[] timesCar = new double[timesCarStr.length];
 			for (int i = 0; i < timesCarStr.length; i++) {
